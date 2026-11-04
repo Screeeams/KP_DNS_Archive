@@ -19,7 +19,16 @@ int parseEvent(const char* line, Event* e) {
 		else {
 			return 0;
 		}
+		
 
+}
+int addEvent(Event buffer[], int* count, Event* e) {
+	if (*count >= MAX_EVENTS) {
+		return 0;
+	}
+	buffer[*count] = *e;
+	(*count)++;
+	return 1;
 }
 int main() {
 
