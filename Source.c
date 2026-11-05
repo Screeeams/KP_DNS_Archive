@@ -14,11 +14,8 @@ typedef struct {
 int parseEvent(const char* line, Event* e);
 int addEvent(Event buffer[], int* count, const Event* e);
 int to_minutes(int h, int m);
+int is_duplicate(Event a, Event b);
 int main() {
-
-
-
-
 	return 0;
 }
 int parseEvent(const char* line, Event* e) {
@@ -29,8 +26,6 @@ int parseEvent(const char* line, Event* e) {
 		else {
 			return 0;
 		}
-		
-
 }
 int addEvent(Event buffer[], int* count, Event* e) {
 	if (*count >= MAX_EVENTS) {
@@ -43,7 +38,12 @@ int addEvent(Event buffer[], int* count, Event* e) {
 int to_minutes(int h, int m) {
 	int mh = h * 60 + m;
 	return mh;
-
-
-
+}
+int is_duplicate(Event a, Event b) {
+	if (a.node == b.node && a.requests == b.requests && abs(to_minutes(a.h, a.m) - to_minutes(b.h, b.m) <= 10)) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
