@@ -40,3 +40,10 @@ int addEvent(Event buffer[], int* count, Event* e) {
 	(*count)++;
 	return 1;
 }
+int to_minutes(int h, int m) {
+	int mh = h * 60 + m;
+	return mh;
+
+
+
+}
