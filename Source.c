@@ -15,6 +15,7 @@ int parseEvent(const char* line, Event* e);
 int addEvent(Event buffer[], int* count, const Event* e);
 int to_minutes(int h, int m);
 int is_duplicate(Event a, Event b);
+int filter_duplicates(Event buffer[], int* count, const Event new_events[], int new_count);
 int main() {
 	return 0;
 }
@@ -47,3 +48,23 @@ int is_duplicate(Event a, Event b) {
 		return 0;
 	}
 }
+int filter_duplicates(Event buffer[], int* count, const Event new_events[], int new_count) {
+	int dup_count = 0;
+	for (int i = 0; i < new_count; i++) {
+		int is_dub = 0;
+		for (int j = 0; j < *count ; j++) {
+			if (is_duplicate(buffer[j], new_events[i]) == 1) {
+				is_dub = 1;
+				break;
+			}
+		}
+		if (is_dub == 1) {
+			dup_count++;
+		}
+		else {
+			addEvent(buffer, count, &new_events[i]);
+		}
+	}
+	return dup_count;
+}
+
