@@ -16,6 +16,7 @@ int addEvent(Event buffer[], int* count, const Event* e);
 int to_minutes(int h, int m);
 int is_duplicate(Event a, Event b);
 int filter_duplicates(Event buffer[], int* count, const Event new_events[], int new_count);
+int readEventsFromFile(const char* filename, Event events[], int max_events);
 int main() {
 	return 0;
 }
@@ -66,5 +67,25 @@ int filter_duplicates(Event buffer[], int* count, const Event new_events[], int 
 		}
 	}
 	return dup_count;
+}
+int readEventsFromFile(const char* filename, Event events[], int max_events) {
+	int count = 0;
+	char line[256];
+	FILE* f = fopen(filename, "r");
+	if (f == NULL) {
+		return -1;
+	}
+	while(fgets(line, sizeof(line), f)!= NULL ) {
+		if (count == max_events) {
+			break;
+		}
+		if (parseEvent(line, &events[count]) == 1) {
+			count++;
+		}
+		
+	}
+	fclose(f);
+	return count;
+
 }
 
