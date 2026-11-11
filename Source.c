@@ -17,6 +17,7 @@ int to_minutes(int h, int m);
 int is_duplicate(Event a, Event b);
 int filter_duplicates(Event buffer[], int* count, const Event new_events[], int new_count);
 int readEventsFromFile(const char* filename, Event events[], int max_events);
+int shouldArchive(Event buffer[], int count, int max_events);
 int main() {
     Event buffer[MAX_EVENTS];
 	int count;
@@ -41,7 +42,7 @@ int parseEvent(const char* line, Event* e) {
 			return 0;
 		}
 }
-int addEvent(Event buffer[], int* count, Event* e) {
+int addEvent(Event buffer[], int* count, const Event* e) {
 	if (*count >= MAX_EVENTS) {
 		return 0;
 	}
@@ -54,7 +55,7 @@ int to_minutes(int h, int m) {
 	return mh;
 }
 int is_duplicate(Event a, Event b) {
-	if (a.node == b.node && a.requests == b.requests && abs(to_minutes(a.h, a.m) - to_minutes(b.h, b.m) <= 10)) {
+	if (a.node == b.node && a.requests == b.requests && abs(to_minutes(a.h, a.m) - to_minutes(b.h, b.m)) <= 10) {
 		return 1;
 	}
 	else {
@@ -100,4 +101,34 @@ int readEventsFromFile(const char* filename, Event events[], int max_events) {
 	return count;
 
 }
+int shouldArchive(Event buffer[], int count, int max_events){
+	int minutes;
+	int count1 = 0;
+	if (count == 0) {
+		return 0;
+	}
+	minutes = to_minutes(buffer[count - 1].h, buffer[count - 1].m) - to_minutes(buffer[0].h, buffer[0].m);
+	
+	if(minutes < 0){
+		minutes = minutes + 1440;
+	}
+	if (minutes >= 60) {
+		count1++;
+	}
+	if (count >= 100) {
+		count1++;
+	}
+	if (count >= max_events * 0.9) {
+		count1++;
+	}
+	if (count1 >= 2) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+
+
+}
+
 
