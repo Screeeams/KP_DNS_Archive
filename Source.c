@@ -18,6 +18,8 @@ int is_duplicate(Event a, Event b);
 int filter_duplicates(Event buffer[], int* count, const Event new_events[], int new_count);
 int readEventsFromFile(const char* filename, Event events[], int max_events);
 int shouldArchive(Event buffer[], int count, int max_events);
+int writeArchive(const char* filename, const Event archive[], int count); 
+
 int main() {
     Event buffer[MAX_EVENTS];
 	int count;
@@ -129,6 +131,17 @@ int shouldArchive(Event buffer[], int count, int max_events){
 	}
 
 
+}
+int writeArchive(const char* filename, const Event archive[], int count) {
+	FILE* f = fopen(filename, "a");
+	if (f == NULL) {
+		return -1;
+	}
+	for (int i = 0; i < count; i++) {
+		fprintf(f, "%02d:%02d %d %d %d\n", archive[i].h, archive[i].m, archive[i].node, archive[i].requests, archive[i].failures);
+	}
+	fclose(f);
+	return 0;
 }
 
 
