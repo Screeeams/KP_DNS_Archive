@@ -18,11 +18,23 @@ int is_duplicate(Event a, Event b);
 int filter_duplicates(Event buffer[], int* count, const Event new_events[], int new_count);
 int readEventsFromFile(const char* filename, Event events[], int max_events);
 int main() {
-	return 0;
+    Event buffer[MAX_EVENTS];
+	int count;
+	setlocale(LC_ALL, "RUS");
+	printf("\tЗдравствуй, пользователь!\n");
+	printf("Данная программа создана студентом первого курса ВГТУ ФИТКБ бТИИ-261 Серебряков А.Г.\n");
+	printf("для формирования и анализа архива событий DNS-сервера (фильтрация дубликатов и архивация по регламенту)\n");
+	count = readEventsFromFile("../Events.txt", buffer, MAX_EVENTS);
+		if (count == -1) {
+			return -1;
+		}
+	for (int i = 0; i < count; i++) {
+		printf("%d. %02d:%02d %d %d %d\n", i + 1 , buffer[i].h, buffer[i].m, buffer[i].node, buffer[i].requests, buffer[i].failures);
+	}
 }
 int parseEvent(const char* line, Event* e) {
 	int parsed = sscanf(line, "%d:%d %d %d %d", &e->h, &e->m, &e->node, &e->requests, &e->failures);
-		if (parsed == 5 && &e->h >= 0 && &e->h < 24 && &e->m >= 0 && &e->m < 60 && &e->node >= 0 && &e->requests >= 0 && &e->failures >= 0) {
+		if (parsed == 5 && e->h >= 0 && e->h < 24 && e->m >= 0 && e->m < 60 && e->node >= 0 && e->requests >= 0 && e->failures >= 0) {
 			return 1;
 		}
 		else {
